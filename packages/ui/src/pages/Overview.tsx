@@ -24,16 +24,15 @@ const I = {
 
 export function Overview({ knowledge, go, mode = 'local' }: { knowledge: Knowledge; go: (tab: string) => void; mode?: 'local' | 'hosted' | 'static' }) {
   const canScan = mode === 'local' || mode === 'hosted';
-  const canLab = mode === 'local';
 
-  const primary = canLab
+  const primary = mode === 'local'
     ? { label: 'Watch a live attack', act: () => go('lab') }
-    : canScan
+    : mode === 'hosted'
       ? { label: 'Scan your site', act: () => go('scan') }
-      : { label: 'See how it works', act: () => go('learn') };
-  const secondary = canScan
-    ? { label: 'Explore the checks', act: () => go('learn') }
-    : { label: 'Harden a page now', act: () => go('tools') };
+      : { label: 'See the live attack', act: () => go('lab') };
+  const secondary = mode === 'local'
+    ? { label: 'Scan your stack', act: () => go('scan') }
+    : { label: 'Explore the checks', act: () => go('learn') };
 
   return (
     <div className="landing">
