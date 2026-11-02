@@ -27,6 +27,8 @@ The hosted server runs with `LOCKGUARD_HOSTED=1`, which enforces all of the abov
 
 ## Prerequisites (one time)
 
+Cloud Run and Cloud Build need the project on the **Blaze (pay-as-you-go) plan** with a billing account attached. Upgrade it in the [Firebase console](https://console.firebase.google.com/project/lockguard-9b9b2/usage/details) under Usage and billing. Hosting stays free; Cloud Run bills per use (one small always-on instance is a few dollars a month — set `--min-instances 0` to pay only per request).
+
 ```bash
 npm install -g firebase-tools
 firebase login                       # your Google account
