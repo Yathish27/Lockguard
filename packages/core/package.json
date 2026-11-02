@@ -1,7 +1,7 @@
 {
-  "name": "@safetyfirst/core",
+  "name": "@lockguard/core",
   "version": "0.1.0",
-  "description": "Safetyfirst scanner engines: web (vendor-script), repo (supply-chain), chain (signer-abuse), plus report formats and hardening tools.",
+  "description": "Lockguard scanner engines: web (vendor-script), repo (supply-chain), chain (signer-abuse), plus report formats and hardening tools.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,12 +9,14 @@
   "exports": {
     ".": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -b"
   },
   "dependencies": {
-    "playwright": "^1.63.0",
+    "playwright": "1.64.1",
     "semver": "^7.7.2",
     "viem": "^2.37.0",
     "yaml": "^2.8.1"

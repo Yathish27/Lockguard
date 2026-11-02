@@ -1,11 +1,11 @@
 {
-  "name": "safetyfirst",
+  "name": "lockguard",
   "version": "0.1.0",
-  "description": "Safetyfirst UI and CLI: check your site, repo and wallets for the weaknesses behind the Polymarket, Binance and Bybit attacks.",
+  "description": "Lockguard UI and CLI: check your site, repo and wallets for the weaknesses behind the Polymarket, Binance and Bybit attacks.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "safetyfirst": "./dist/cli.js"
+    "lockguard": "./dist/cli.js"
   },
   "main": "./dist/server.js",
   "files": [
@@ -16,10 +16,10 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "@safetyfirst/core": "0.1.0",
+    "@lockguard/core": "0.1.0",
     "express": "^5.1.0",
     "undici": "^7.16.0",
-    "@safetyfirst/lab": "0.1.0"
+    "@lockguard/lab": "0.1.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",

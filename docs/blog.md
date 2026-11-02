@@ -59,7 +59,7 @@ On-chain, the same posture shows up as two checks you can run today: is any addr
 
 ## Watch it happen: the lab
 
-Reading about a DOM-storage token is abstract. Watching one get stolen is not. Safetyfirst ships a tiny exchange that runs entirely on your machine, in two builds.
+Reading about a DOM-storage token is abstract. Watching one get stolen is not. Lockguard ships a tiny exchange that runs entirely on your machine, in two builds.
 
 Open the **vulnerable** build, log in, and it stashes a session token and a trading API key in `localStorage` — the way Polymarket's front-end kept trading keys in the browser. Now flip the pretend vendor CDN to "compromised" and reload. A cross-origin script reads the token, calls the exchange's own withdraw API as you, and rewrites the screen. The balance is gone.
 
@@ -69,7 +69,7 @@ There is no real exploit code in the lab. It only ever attacks its own in-memory
 
 ## Check yourself: the scanner
 
-Safetyfirst's UI has three scanners. Point the **web** module at a site you own and it inventories every third-party origin, flags scripts without SRI, grades your CSP, and finds session tokens or API keys sitting in `localStorage`. Point the **repo** module at a checkout and it finds install scripts, committed secrets, unpinned actions and static cloud keys. Point the **chain** module at your addresses and it checks for EIP-7702 delegations and unlimited approvals, and lints your signer policy.
+Lockguard's UI has three scanners. Point the **web** module at a site you own and it inventories every third-party origin, flags scripts without SRI, grades your CSP, and finds session tokens or API keys sitting in `localStorage`. Point the **repo** module at a checkout and it finds install scripts, committed secrets, unpinned actions and static cloud keys. Point the **chain** module at your addresses and it checks for EIP-7702 delegations and unlimited approvals, and lints your signer policy.
 
 Every finding comes with the real incident it maps to, why it matters, and a fix you can copy. The results group into the three kill chains above, so you see "this is the step where Polymarket happened to you," not a flat list.
 
@@ -86,4 +86,4 @@ If you do nothing else:
 
 Run it against your own stack: `npm install && npm start`. Everything stays on your machine.
 
-*Incident figures are from public reporting at the time of writing; where sources disagree, Safetyfirst's knowledge base says so. Sources are listed in [`docs/incidents.md`](incidents.md).*
+*Incident figures are from public reporting at the time of writing; where sources disagree, Lockguard's knowledge base says so. Sources are listed in [`docs/incidents.md`](incidents.md).*

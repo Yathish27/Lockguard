@@ -6,8 +6,8 @@ import {
   scoreFindings, diffBaseline, buildBaseline, makeFinding, toSarif, toMarkdown,
   approveZeroCalldata, setApprovalForAllFalseCalldata, summarizeKillChains,
   RULE_LIST, INCIDENT_LIST, KILL_CHAINS, type Finding, type ScriptObservation, type ModuleResult
-} from '@safetyfirst/core';
-import { analyzeCsp } from '@safetyfirst/core';
+} from '@lockguard/core';
+import { analyzeCsp } from '@lockguard/core';
 
 test('registrable domain + third-party detection', () => {
   assert.equal(registrableDomain('a.b.example.com'), 'example.com');
@@ -101,11 +101,11 @@ test('knowledge base integrity: every rule maps to real incidents and kill-chain
 test('SARIF and Markdown export', () => {
   const findings = [makeFinding('R5', { key: 'R5:x', summary: 'secret', severity: 'critical', evidence: [{ location: 'src/.env', detail: 'token', line: 3 }] })];
   const mod: ModuleResult = { module: 'repo', target: '/repo', startedAt: '', finishedAt: '', findings, score: scoreFindings(findings), meta: { root: '/repo' }, errors: [] };
-  const report = { id: 'x', tool: { name: 'Safetyfirst', version: '0.1.0' }, createdAt: '', targets: {}, modules: [mod], overall: scoreFindings(findings), killChains: summarizeKillChains([mod]) };
+  const report = { id: 'x', tool: { name: 'Lockguard', version: '0.1.0' }, createdAt: '', targets: {}, modules: [mod], overall: scoreFindings(findings), killChains: summarizeKillChains([mod]) };
   const sarif = toSarif(report, '/repo') as { runs: { results: unknown[]; tool: { driver: { rules: unknown[] } } }[] };
   assert.equal(sarif.runs[0].results.length, 1);
   assert.ok(sarif.runs[0].tool.driver.rules.length >= RULE_LIST.length);
   const md = toMarkdown(report);
-  assert.ok(md.includes('Safetyfirst report'));
+  assert.ok(md.includes('Lockguard report'));
   assert.ok(md.includes('R5'));
 });

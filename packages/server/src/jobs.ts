@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { runScan, type Report, type ScanTargets } from '@safetyfirst/core';
+import { runScan, type Report, type ScanTargets } from '@lockguard/core';
 import { saveReport } from './store.js';
 
 export interface Job {

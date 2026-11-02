@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { createApp } from './server.js';
 import { startScan, getJob } from './jobs.js';
-import { toMarkdown, toSarif, type ScanTargets, type Report, type Severity } from '@safetyfirst/core';
+import { toMarkdown, toSarif, type ScanTargets, type Report, type Severity } from '@lockguard/core';
 import { writeFileSync, readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
@@ -22,11 +22,11 @@ function parseArgs(argv: string[]): Record<string, string | boolean | string[]> 
   return out;
 }
 
-const HELP = `Safetyfirst — see the weaknesses behind the Polymarket, Binance and Bybit attacks in your own site, repo and wallets.
+const HELP = `Lockguard — see the weaknesses behind the Polymarket, Binance and Bybit attacks in your own site, repo and wallets.
 
 Usage:
-  safetyfirst ui [--port 4477] [--host 127.0.0.1] [--no-open]     Launch the UI (default command)
-  safetyfirst scan [targets] [options]                             Run a scan from the terminal
+  lockguard ui [--port 4477] [--host 127.0.0.1] [--no-open]     Launch the UI (default command)
+  lockguard scan [targets] [options]                             Run a scan from the terminal
 
 Scan targets (any combination):
   --web <url>                 Scan a site you own (headless browser)
@@ -49,11 +49,11 @@ Options:
   --fail-on <severity>        Exit non-zero if a finding at/above this severity exists (critical|high|medium|low)
 
 Examples:
-  safetyfirst ui
-  safetyfirst scan --repo .
-  safetyfirst scan --web https://app.example.com/trade --signing-page
-  safetyfirst scan --chain 0xabc... --network mainnet
-  safetyfirst scan --repo . --web https://example.com --fail-on high --sarif out.sarif
+  lockguard ui
+  lockguard scan --repo .
+  lockguard scan --web https://app.example.com/trade --signing-page
+  lockguard scan --chain 0xabc... --network mainnet
+  lockguard scan --repo . --web https://example.com --fail-on high --sarif out.sarif
 `;
 
 function readFileArg(path: string): string {
@@ -78,9 +78,9 @@ async function runUi(args: Record<string, string | boolean | string[]>) {
   const server = createServer(app);
   await new Promise<void>((resolve, reject) => { server.on('error', reject); server.listen(port, host, resolve); });
   const url = `http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`;
-  console.log(`\n  Safetyfirst is running at ${url}\n`);
+  console.log(`\n  Lockguard is running at ${url}\n`);
   console.log('  Scan only assets you own. Everything stays on this machine; there is no telemetry.\n');
-  if (!args['no-open'] && process.env.SAFETYFIRST_NO_OPEN !== '1') openBrowser(url);
+  if (!args['no-open'] && process.env.LOCKGUARD_NO_OPEN !== '1') openBrowser(url);
 }
 
 function openBrowser(url: string) {

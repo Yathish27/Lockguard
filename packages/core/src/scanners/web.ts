@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import type { Baseline, Evidence, Finding, ModuleResult, Progress, ScriptObservation, Severity, WebTarget } from '../types.js';
 import { makeFinding, bump } from '../knowledge/index.js';
 import { isThirdParty, isLocalHost, categorizeHost } from '../util/origin.js';
+import { assertPublicUrl } from '../util/ssrf.js';
 import { sha256Hex, sriHash, mask } from '../util/hash.js';
 import { scoreFindings } from '../report/score.js';
 import { buildBaseline, diffBaseline } from '../baseline.js';
@@ -18,7 +19,7 @@ const CANDIDATE_BROWSERS = [
 
 /** Use Playwright's own Chromium when present; otherwise fall back to a system browser so the tool still runs. */
 export function resolveBrowserPath(): string | undefined {
-  const env = process.env.SAFETYFIRST_BROWSER_PATH;
+  const env = process.env.LOCKGUARD_BROWSER_PATH;
   if (env && existsSync(env)) return env;
   try {
     const p = chromium.executablePath();
@@ -136,6 +137,13 @@ export async function scanWeb(target: WebTarget, onProgress: Progress = () => {}
 
   const meta: Record<string, unknown> = { url };
   try {
+    if (target.blockPrivateHosts) {
+      const check = await assertPublicUrl(url);
+      if (!check.ok) {
+        errors.push(`web: ${check.reason}`);
+        return { module: 'web', target: url, startedAt, finishedAt: new Date().toISOString(), findings: [], score: scoreFindings([]), meta: { url, blocked: check.reason }, errors };
+      }
+    }
     onProgress('Launching headless Chromium', 2);
     const executablePath = resolveBrowserPath();
     browser = await chromium.launch({
@@ -146,7 +154,7 @@ export async function scanWeb(target: WebTarget, onProgress: Progress = () => {}
     const context = await browser.newContext({
       storageState: (target.storageState as any) ?? undefined,
       ignoreHTTPSErrors: target.ignoreHTTPSErrors ?? false,
-      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36 Safetyfirst/0.1 (+https://github.com/Yathish27/Lockguard)'
+      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36 Lockguard/0.1 (+https://github.com/Yathish27/Lockguard)'
     });
     const page = await context.newPage();
 

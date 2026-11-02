@@ -8,7 +8,7 @@ export async function computeSri(url: string, opts: { maxBytes?: number; timeout
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), opts.timeoutMs ?? 20_000);
   try {
-    const res = await fetch(u, { signal: ctrl.signal, redirect: 'follow', headers: { 'user-agent': 'Safetyfirst/0.1 SRI generator' } });
+    const res = await fetch(u, { signal: ctrl.signal, redirect: 'follow', headers: { 'user-agent': 'Lockguard/0.1 SRI generator' } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const buf = Buffer.from(await res.arrayBuffer());
     if (buf.length > (opts.maxBytes ?? 15_000_000)) throw new Error('File too large');

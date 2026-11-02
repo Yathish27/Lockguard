@@ -1,4 +1,4 @@
-// Safetyfirst lab — a tiny, entirely local "exchange" in two builds.
+// Lockguard lab — a tiny, entirely local "exchange" in two builds.
 //
 //  VULNERABLE build  (how Polymarket / Bybit happened):
 //    - session token + a "trading API key" live in localStorage, readable by any script

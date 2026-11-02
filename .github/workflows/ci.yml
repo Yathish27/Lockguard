@@ -17,9 +17,9 @@ jobs:
       - run: npm run build
       - run: npm test
       # Dogfood: scan this repo with the tool we just built.
-      - run: node packages/server/dist/cli.js scan --repo . --fail-on critical --sarif safetyfirst.sarif
+      - run: node packages/server/dist/cli.js scan --repo . --fail-on critical --sarif lockguard.sarif
         if: always()
       - uses: github/codeql-action/upload-sarif@4e828ff8d448a8a6e532957b1811f387a63867e8 # v3.29.4
         if: always()
         with:
-          sarif_file: safetyfirst.sarif
+          sarif_file: lockguard.sarif

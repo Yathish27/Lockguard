@@ -19,6 +19,7 @@ export interface ScanRequest {
 
 export const api = {
   health: () => req<{ ok: boolean; version: string }>('/health'),
+  config: () => req<{ hosted: boolean; version: string; modules: { web: boolean; repo: boolean; chain: boolean }; lab: boolean }>('/config'),
   knowledge: () => req<Knowledge>('/knowledge'),
   startScan: (body: ScanRequest) => post<{ id: string }>('/scan', body),
   job: (id: string) => req<Job>(`/scan/${id}`),

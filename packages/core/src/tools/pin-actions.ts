@@ -7,7 +7,7 @@ const USES_RE = /^(\s*-?\s*uses:\s*["']?)([^\s"'#@]+)@([^\s"'#]+)(["']?)(\s*(#.*
 export async function pinActions(yaml: string, opts: { token?: string; fetchImpl?: typeof fetch } = {}): Promise<PinResult> {
   const f = opts.fetchImpl ?? fetch;
   const cache = new Map<string, Promise<string>>();
-  const headers: Record<string, string> = { accept: 'application/vnd.github+json', 'user-agent': 'Safetyfirst/0.1 action pinner', 'x-github-api-version': '2022-11-28' };
+  const headers: Record<string, string> = { accept: 'application/vnd.github+json', 'user-agent': 'Lockguard/0.1 action pinner', 'x-github-api-version': '2022-11-28' };
   const token = opts.token ?? process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
   if (token) headers.authorization = `Bearer ${token}`;
 

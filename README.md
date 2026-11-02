@@ -1,12 +1,12 @@
 <div align="center">
 
-# Safetyfirst
+# Lockguard
 
 **See the exact weaknesses behind the Polymarket, Binance and Bybit attacks — in your own site, repo and wallets.**
 
 Open source · MIT · runs entirely on your machine · no telemetry
 
-<img src="docs/screenshots/01-overview.png" alt="Safetyfirst overview" width="860">
+<img src="docs/screenshots/01-overview.png" alt="Lockguard overview" width="860">
 
 </div>
 
@@ -19,7 +19,7 @@ On **29 October 2026**, two attacks landed on the same day.
 
 Eight months earlier, **Bybit** lost **$1.5B** when a Safe{Wallet} developer's machine was compromised and planted JavaScript rewrote what Bybit's signers saw.
 
-**Neither of the October hacks broke a smart contract.** Both came through things developers wire up every day: a vendor script, a signing pipeline, a laptop with credentials on it. Safetyfirst checks your own stack for those exact weaknesses, shows you the real incident each finding maps to, and hands you the fix.
+**Neither of the October hacks broke a smart contract.** Both came through things developers wire up every day: a vendor script, a signing pipeline, a laptop with credentials on it. Lockguard checks your own stack for those exact weaknesses, shows you the real incident each finding maps to, and hands you the fix.
 
 ## What it is
 
@@ -35,7 +35,7 @@ Every finding is scored, grouped by **kill chain**, mapped to the **real inciden
 
 ## How it helps
 
-Most security tools give you a flat list of alerts and leave you to figure out whether any of it matters. Safetyfirst is built around a different idea: **you only act on a weakness once you understand the attack it enables and can see the fix.**
+Most security tools give you a flat list of alerts and leave you to figure out whether any of it matters. Lockguard is built around a different idea: **you only act on a weakness once you understand the attack it enables and can see the fix.**
 
 - **It finds the weaknesses that actually got people robbed**, not a generic checklist. Every check traces to a real 2025–2026 incident where that exact gap was the way in.
 - **It tells you why each finding matters, in plain terms**, with the real incident attached — so a developer can judge severity for their own app instead of trusting a number.
@@ -50,8 +50,8 @@ Most security tools give you a flat list of alerts and leave you to figure out w
 ## Quick start
 
 ```bash
-git clone https://github.com/Yathish27/Lockguard safetyfirst
-cd safetyfirst
+git clone https://github.com/Yathish27/Lockguard lockguard
+cd lockguard
 npm install
 npm run build
 npm start          # opens the UI at http://localhost:4477
@@ -84,11 +84,11 @@ Then:
 ### CLI
 
 ```bash
-npx safetyfirst ui                                   # the UI (same as npm start)
-npx safetyfirst scan --repo .                        # scan a repository
-npx safetyfirst scan --web https://app.example.com/trade --signing-page
-npx safetyfirst scan --chain 0xYourAddress --network mainnet
-npx safetyfirst scan --repo . --fail-on high --sarif out.sarif   # for CI
+npx lockguard ui                                   # the UI (same as npm start)
+npx lockguard scan --repo .                        # scan a repository
+npx lockguard scan --web https://app.example.com/trade --signing-page
+npx lockguard scan --chain 0xYourAddress --network mainnet
+npx lockguard scan --repo . --fail-on high --sarif out.sarif   # for CI
 ```
 
 ### In CI (GitHub Actions)
@@ -102,6 +102,19 @@ npx safetyfirst scan --repo . --fail-on high --sarif out.sarif   # for CI
 ```
 
 Findings upload to GitHub code scanning as SARIF.
+
+### Run it hosted (Firebase)
+
+Lockguard also deploys to Firebase as a shared web app: **Firebase Hosting** serves the UI and **Cloud Run** runs the API (with Chromium) for the web and chain scanners and the Harden tools. The hosted build runs in `LOCKGUARD_HOSTED=1` mode, which blocks SSRF (web targets must be public) and hides the repo scanner and the lab, since both are inherently local. See [`DEPLOY.md`](DEPLOY.md) for the full setup; the short version:
+
+```bash
+npm ci && npm run build
+gcloud run deploy lockguard-api --source . --region us-central1 \
+  --allow-unauthenticated --memory 2Gi --cpu 2 \
+  --min-instances 1 --max-instances 1 --no-cpu-throttling \
+  --set-env-vars LOCKGUARD_HOSTED=1
+firebase deploy --only hosting
+```
 
 ## The lab
 

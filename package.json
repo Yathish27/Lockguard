@@ -1,8 +1,8 @@
 {
-  "name": "safetyfirst-monorepo",
+  "name": "lockguard-monorepo",
   "private": true,
   "version": "0.1.0",
-  "description": "Safetyfirst: see the exact weaknesses behind the Polymarket, Binance and Bybit attacks in your own site, repo and wallets. UI-first, local, open source.",
+  "description": "Lockguard: see the exact weaknesses behind the Polymarket, Binance and Bybit attacks in your own site, repo and wallets. UI-first, local, open source.",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -15,7 +15,7 @@
     "packages/ui"
   ],
   "scripts": {
-    "build": "tsc -b && npm run build -w @safetyfirst/ui",
+    "build": "tsc -b && npm run build -w @lockguard/ui",
     "start": "node packages/server/dist/cli.js ui",
     "dev": "node scripts/dev.mjs",
     "lab": "node packages/lab/dist/index.js",

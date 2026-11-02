@@ -147,6 +147,8 @@ export interface WebTarget {
   timeoutMs?: number;
   settleMs?: number;
   ignoreHTTPSErrors?: boolean;
+  /** Hosted mode: refuse localhost / private / metadata targets (SSRF guard). */
+  blockPrivateHosts?: boolean;
 }
 
 export interface RepoTarget {

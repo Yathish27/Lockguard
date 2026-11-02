@@ -123,7 +123,7 @@ function ActionsTool() {
   return (
     <div className="card">
       <h3>Pin GitHub Actions to commit SHAs</h3>
-      <p className="sub">Paste a workflow. Safetyfirst resolves each <code>uses: owner/repo@tag</code> to the tag's commit SHA, which a maintainer (or an attacker with their token) cannot move.</p>
+      <p className="sub">Paste a workflow. Lockguard resolves each <code>uses: owner/repo@tag</code> to the tag's commit SHA, which a maintainer (or an attacker with their token) cannot move.</p>
       <label>Workflow YAML</label>
       <textarea value={yaml} onChange={(e) => setYaml(e.target.value)} placeholder={'name: ci\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4'} style={{ minHeight: 160 }} />
       <details style={{ margin: '8px 0' }}><summary style={{ cursor: 'pointer', color: 'var(--muted)', fontSize: 13 }}>GitHub token (optional, avoids API rate limits)</summary><input type="text" placeholder="ghp_… (read-only; used only for api.github.com lookups)" value={token} onChange={(e) => setToken(e.target.value)} style={{ marginTop: 8 }} /></details>
@@ -163,7 +163,7 @@ function PolicyTool({ knowledge }: { knowledge: Knowledge }) {
       {err && <div className="banner err" style={{ marginTop: 12 }}>{err}</div>}
       {findings && (
         <div style={{ marginTop: 14 }}>
-          {findings.length === 0 ? <div className="banner ok">No gaps found. This policy closes every check Safetyfirst knows about.</div> :
+          {findings.length === 0 ? <div className="banner ok">No gaps found. This policy closes every check Lockguard knows about.</div> :
             <>
               <p className="sub">{findings.length} gap(s). Fix the critical and high ones first.</p>
               {findings.map((f) => <FindingCard key={f.key} f={f} incidents={incidents} />)}

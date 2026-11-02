@@ -1,6 +1,6 @@
-# Contributing to Safetyfirst
+# Contributing to Lockguard
 
-Safetyfirst grows by adding checks that map to real incidents. The bar for a new check: it must correspond to a weakness that was actually exploited (or is a direct, documented precondition), and it must come with a hands-on fix.
+Lockguard grows by adding checks that map to real incidents. The bar for a new check: it must correspond to a weakness that was actually exploited (or is a direct, documented precondition), and it must come with a hands-on fix.
 
 ## Layout
 

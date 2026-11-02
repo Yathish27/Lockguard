@@ -2,7 +2,7 @@ import type { KillChain } from '../types.js';
 
 /**
  * Each attack written as steps. For every step: the guardrail that should stop it, the signal that proves it was tried,
- * and the Safetyfirst rules that check whether the guardrail is actually in place.
+ * and the Lockguard rules that check whether the guardrail is actually in place.
  */
 export const KILL_CHAINS: KillChain[] = [
   {

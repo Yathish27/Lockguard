@@ -2,7 +2,7 @@ import { readdirSync, statSync, readFileSync, existsSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
-export const DEFAULT_IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'out', '.next', '.nuxt', '.turbo', 'coverage', '.cache', '.parcel-cache', 'vendor', '.venv', 'venv', '__pycache__', '.safetyfirst', 'target']);
+export const DEFAULT_IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'out', '.next', '.nuxt', '.turbo', 'coverage', '.cache', '.parcel-cache', 'vendor', '.venv', 'venv', '__pycache__', '.lockguard', 'target']);
 
 export function readText(path: string, maxBytes = 1_000_000): string | null {
   try {
@@ -21,7 +21,7 @@ export function readJson<T = unknown>(path: string): T | null {
 }
 
 export function loadIgnorePatterns(root: string): string[] {
-  const t = readText(join(root, '.safetyfirstignore'));
+  const t = readText(join(root, '.lockguardignore'));
   if (!t) return [];
   return t.split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
 }

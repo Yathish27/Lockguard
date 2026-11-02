@@ -1,7 +1,7 @@
 {
-  "name": "@safetyfirst/lab",
+  "name": "@lockguard/lab",
   "version": "0.1.0",
-  "description": "Safetyfirst lab: a tiny local exchange in a vulnerable and a hardened build, plus a fake vendor CDN you can 'compromise' to watch the Polymarket and Bybit patterns happen.",
+  "description": "Lockguard lab: a tiny local exchange in a vulnerable and a hardened build, plus a fake vendor CDN you can 'compromise' to watch the Polymarket and Bybit patterns happen.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

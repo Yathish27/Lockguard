@@ -1,4 +1,4 @@
-name: 'Safetyfirst'
+name: 'Lockguard'
 description: 'Scan your site, repo and wallets for the weaknesses behind the Polymarket, Binance and Bybit attacks.'
 branding: { icon: 'shield', color: 'green' }
 inputs:
@@ -30,7 +30,7 @@ inputs:
   sarif:
     description: 'Path to write a SARIF file for GitHub code scanning.'
     required: false
-    default: 'safetyfirst.sarif'
+    default: 'lockguard.sarif'
 runs:
   using: 'composite'
   steps:
@@ -44,4 +44,4 @@ runs:
         [ -n "${{ inputs.rpc }}" ] && ARGS="$ARGS --rpc ${{ inputs.rpc }}"
         [ "${{ inputs.signing-page }}" = "true" ] && ARGS="$ARGS --signing-page"
         [ -n "${{ inputs.web }}" ] && npx --yes playwright install --with-deps chromium
-        npx --yes safetyfirst@latest scan $ARGS --sarif "${{ inputs.sarif }}" --fail-on "${{ inputs.fail-on }}"
+        npx --yes lockguard@latest scan $ARGS --sarif "${{ inputs.sarif }}" --fail-on "${{ inputs.fail-on }}"

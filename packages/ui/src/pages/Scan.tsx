@@ -7,7 +7,7 @@ import { KillChainMap } from '../components/KillChainMap';
 
 const NETWORKS = ['mainnet', 'base', 'arbitrum', 'optimism', 'polygon', 'bsc', 'sepolia'];
 
-export function Scan({ knowledge, labUrls }: { knowledge: Knowledge; labUrls: { vulnerable: string | null } }) {
+export function Scan({ knowledge, labUrls, hosted = false }: { knowledge: Knowledge; labUrls: { vulnerable: string | null }; hosted?: boolean }) {
   const [useWeb, setUseWeb] = useState(true);
   const [useRepo, setUseRepo] = useState(false);
   const [useChain, setUseChain] = useState(false);
@@ -64,6 +64,7 @@ export function Scan({ knowledge, labUrls }: { knowledge: Knowledge; labUrls: { 
       </div>
 
       <div className="banner warn">Only scan targets you control. The web scan drives a real headless browser against the URL you give it.</div>
+      {hosted && <div className="banner info">You are on the hosted Lockguard. The web and chain scanners work here (web targets must be public). Repo scanning and the lab run in the local app.</div>}
 
       <div className="card">
         <label className="check"><input type="checkbox" checked={useWeb} onChange={(e) => setUseWeb(e.target.checked)} /> <b>Web</b> — your site, for the Polymarket / Bybit vendor-script pattern</label>
@@ -100,8 +101,9 @@ export function Scan({ knowledge, labUrls }: { knowledge: Knowledge; labUrls: { 
       </div>
 
       <div className="card">
-        <label className="check"><input type="checkbox" checked={useRepo} onChange={(e) => setUseRepo(e.target.checked)} /> <b>Repo</b> — a local repository, for the TraderTraitor supply-chain entry point</label>
-        {useRepo && (
+        <label className="check" style={hosted ? { opacity: .55 } : undefined}><input type="checkbox" checked={useRepo && !hosted} disabled={hosted} onChange={(e) => setUseRepo(e.target.checked)} /> <b>Repo</b> — a local repository, for the TraderTraitor supply-chain entry point</label>
+        {hosted && <div className="hint" style={{ marginTop: 8 }}>Repo scanning reads a local filesystem, so it runs in the local app: <code>npx lockguard scan --repo .</code></div>}
+        {useRepo && !hosted && (
           <div style={{ marginTop: 12 }}>
             <label>Absolute path to the repository on this machine</label>
             <input type="text" placeholder="/home/you/code/your-exchange" value={repoPath} onChange={(e) => setRepoPath(e.target.value)} />

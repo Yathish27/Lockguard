@@ -1,11 +1,11 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Baseline } from '@safetyfirst/core';
-import { baselineFileName } from '@safetyfirst/core';
+import type { Baseline } from '@lockguard/core';
+import { baselineFileName } from '@lockguard/core';
 
 /** Local, on-disk only. Nothing leaves the machine. */
 export function dataDir(): string {
-  const d = process.env.SAFETYFIRST_HOME || join(process.cwd(), '.safetyfirst');
+  const d = process.env.LOCKGUARD_HOME || join(process.cwd(), '.lockguard');
   mkdirSync(join(d, 'baselines'), { recursive: true });
   mkdirSync(join(d, 'reports'), { recursive: true });
   return d;

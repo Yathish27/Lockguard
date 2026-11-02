@@ -2,10 +2,10 @@ import { parse as parseYaml } from 'yaml';
 import type { Evidence, Finding, Severity } from '../types.js';
 import { makeFinding } from '../knowledge/index.js';
 
-/** Safetyfirst signer policy, version 1. See docs/signer-policy.md. */
-export const SIGNER_POLICY_TEMPLATE = `# Safetyfirst signer policy v1
+/** Lockguard signer policy, version 1. See docs/signer-policy.md. */
+export const SIGNER_POLICY_TEMPLATE = `# Lockguard signer policy v1
 # Describe what each signing key is allowed to sign. The signing service (HSM / MPC policy engine) enforces it;
-# this file is the reviewable source of truth and is what Safetyfirst lints.
+# this file is the reviewable source of truth and is what Lockguard lints.
 version: 1
 org: Example Exchange
 signers:
@@ -113,7 +113,7 @@ export function lintSignerPolicy(input: string | Record<string, unknown>): Findi
     if (role === 'cold' && req < 2) add('P08', where, 'cold signer without multi-approval', 'high', `${s.id ?? where} (cold) requires ${req || 'no'} approver(s).`, `approvals.requiredApprovers = ${JSON.stringify(ap.requiredApprovers)}`, ['Cold / treasury movements need ≥ 2 (ideally 3) independent approvers on separate devices.']);
     else if (hot && (req < 2 || !(Number(ap.aboveUsd) >= 0))) add('P08', where, 'no step-up approval threshold', 'medium', `${s.id ?? where} has no amount above which a second approver is required.`, `approvals = ${JSON.stringify(ap)}`, ['Add approvals: { requiredApprovers: 2, aboveUsd: <threshold> }.']);
     if (!Array.isArray(s.chainIds) || !s.chainIds.length) add('P10', where, 'no chain allowlist', 'medium', `${s.id ?? where} may sign for any chain id (replay / wrong-chain risk).`, 'chainIds missing', ['List the chain ids this key is used on.']);
-    if (!s.address || !/^0x[0-9a-fA-F]{40}$/.test(String(s.address))) add('P11', where, 'signer address missing', 'low', `${s.id ?? where} has no valid address, so Safetyfirst cannot cross-check it on-chain.`, `address = ${JSON.stringify(s.address)}`);
+    if (!s.address || !/^0x[0-9a-fA-F]{40}$/.test(String(s.address))) add('P11', where, 'signer address missing', 'low', `${s.id ?? where} has no valid address, so Lockguard cannot cross-check it on-chain.`, `address = ${JSON.stringify(s.address)}`);
   });
 
   const cb = p.circuitBreaker;

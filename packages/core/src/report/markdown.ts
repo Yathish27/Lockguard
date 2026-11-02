@@ -3,7 +3,7 @@ import { INCIDENTS } from '../knowledge/index.js';
 
 export function toMarkdown(report: Report): string {
   const L: string[] = [];
-  L.push(`# Safetyfirst report`, '', `Generated ${report.createdAt} · overall score **${report.overall.value}/100 (${report.overall.grade})**`, '');
+  L.push(`# Lockguard report`, '', `Generated ${report.createdAt} · overall score **${report.overall.value}/100 (${report.overall.grade})**`, '');
   L.push('| Module | Target | Score | Critical | High | Medium | Low | Info |', '|---|---|---|---|---|---|---|---|');
   for (const m of report.modules) L.push(`| ${m.module} | ${m.target} | ${m.score.value} (${m.score.grade}) | ${m.score.counts.critical} | ${m.score.counts.high} | ${m.score.counts.medium} | ${m.score.counts.low} | ${m.score.counts.info} |`);
   L.push('', '## Kill chains', '');

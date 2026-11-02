@@ -30,7 +30,7 @@ export async function startLab(opts: { vulnPort?: number; hardPort?: number; ven
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   startLab().then((l) => {
-    console.log(`\n  Safetyfirst lab`);
+    console.log(`\n  Lockguard lab`);
     console.log(`    vulnerable build : ${l.vulnerable}`);
     console.log(`    hardened build   : ${l.hardened}`);
     console.log(`    vendor CDN       : ${l.vendor}  (flip this to "compromised" from either build)\n`);

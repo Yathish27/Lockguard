@@ -24,6 +24,7 @@ export { pinActions } from './tools/pin-actions.js';
 export type { PinResult, PinChange } from './tools/pin-actions.js';
 export { isThirdParty, registrableDomain, categorizeHost, isLocalHost, isAddressLike } from './util/origin.js';
 export { sriHash, sha256Hex } from './util/hash.js';
+export { assertPublicUrl, isPrivateAddress } from './util/ssrf.js';
 
 /** Run every requested module and assemble a report with kill-chain coverage. */
 export async function runScan(targets: ScanTargets, onProgress: Progress = () => {}, opts: { id?: string } = {}): Promise<Report> {
@@ -37,5 +38,5 @@ export async function runScan(targets: ScanTargets, onProgress: Progress = () =>
   onProgress('Assembling report', 100);
   const { web, ...rest } = targets;
   const safeTargets: ScanTargets = { ...rest, ...(web ? { web: { ...web, storageState: web.storageState ? '[provided]' as any : undefined, baseline: web.baseline ? ({ ...web.baseline, scripts: [] }) : web.baseline } } : {}) };
-  return assembleReport({ id: opts.id ?? randomUUID(), tool: { name: 'Safetyfirst', version: VERSION }, createdAt: new Date().toISOString(), targets: safeTargets, modules });
+  return assembleReport({ id: opts.id ?? randomUUID(), tool: { name: 'Lockguard', version: VERSION }, createdAt: new Date().toISOString(), targets: safeTargets, modules });
 }

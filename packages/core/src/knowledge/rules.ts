@@ -59,7 +59,7 @@ export const RULES: Record<string, RuleDef> = {
         'For scripts you keep: load a pinned version, add Subresource Integrity (W2), and prefer self-hosting the file from your own origin.',
         'Move non-essential widgets (chat, surveys) into a sandboxed iframe on a separate origin so they cannot touch your DOM or storage.',
         'Replace remote-configured loaders (tag managers, session replay) on sensitive pages. They cannot be integrity-checked by design.',
-        'Treat vendor script changes like code changes: they go through change review, and Safetyfirst\'s baseline (W6) flags drift.'
+        'Treat vendor script changes like code changes: they go through change review, and Lockguard\'s baseline (W6) flags drift.'
       ],
       snippets: [
         {
@@ -96,7 +96,7 @@ export const RULES: Record<string, RuleDef> = {
       impact: 'high',
       steps: [
         'Pin the script to an immutable URL (a versioned path, not "latest").',
-        'Compute the hash of the file as served (Safetyfirst\'s Harden tab does this) and add integrity="sha384-…" crossorigin="anonymous".',
+        'Compute the hash of the file as served (Lockguard\'s Harden tab does this) and add integrity="sha384-…" crossorigin="anonymous".',
         'The vendor must serve the file with CORS (Access-Control-Allow-Origin); if it cannot, self-host the file.',
         'If the script is inserted by another script (tag manager, loader) there is no tag to annotate: replace the loader on sensitive pages.',
         'Verify in CI: fetch each pinned URL and compare the hash. A mismatch means the vendor changed the file, which is a change-review event, not a silent update.'
@@ -242,7 +242,7 @@ export const RULES: Record<string, RuleDef> = {
       impact: 'high',
       steps: [
         'Confirm each changed or new script is a deploy you expected. If not, kill-switch the vendor tag now and roll the CDN back to the last known-good build.',
-        'Once reviewed, save a new baseline from the Safetyfirst UI (or commit .safetyfirst/baselines/<host>.json).',
+        'Once reviewed, save a new baseline from the Lockguard UI (or commit .lockguard/baselines/<host>.json).',
         'Run the web scan on a schedule (GitHub Action below) with --baseline so drift fails the job and pages someone.',
         'Pin versions and add SRI (W2) so drift cannot execute even if it is not noticed.'
       ],
@@ -250,7 +250,7 @@ export const RULES: Record<string, RuleDef> = {
         {
           title: 'Scheduled drift check (GitHub Actions)',
           lang: 'yaml',
-          code: `name: safetyfirst-drift\non:\n  schedule: [{ cron: '*/30 * * * *' }]\n  workflow_dispatch:\njobs:\n  web:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@<pinned-sha>\n      - uses: actions/setup-node@<pinned-sha>\n        with: { node-version: 22 }\n      - run: npx playwright install --with-deps chromium\n      - run: npx safetyfirst scan --web https://app.yourdomain.example/trade --baseline --fail-on high --sarif safetyfirst.sarif\n      - uses: github/codeql-action/upload-sarif@<pinned-sha>\n        if: always()\n        with: { sarif_file: safetyfirst.sarif }`
+          code: `name: lockguard-drift\non:\n  schedule: [{ cron: '*/30 * * * *' }]\n  workflow_dispatch:\njobs:\n  web:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@<pinned-sha>\n      - uses: actions/setup-node@<pinned-sha>\n        with: { node-version: 22 }\n      - run: npx playwright install --with-deps chromium\n      - run: npx lockguard scan --web https://app.yourdomain.example/trade --baseline --fail-on high --sarif lockguard.sarif\n      - uses: github/codeql-action/upload-sarif@<pinned-sha>\n        if: always()\n        with: { sarif_file: lockguard.sarif }`
         }
       ]
     },
@@ -424,7 +424,7 @@ export const RULES: Record<string, RuleDef> = {
       effort: 'minutes',
       impact: 'medium',
       steps: [
-        'Replace each uses: owner/repo@tag with uses: owner/repo@<40-char sha> # tag. Safetyfirst\'s Harden tab rewrites a workflow for you.',
+        'Replace each uses: owner/repo@tag with uses: owner/repo@<40-char sha> # tag. Lockguard\'s Harden tab rewrites a workflow for you.',
         'Enable Dependabot for github-actions so pins get reviewable update PRs.',
         'In organisation settings, restrict actions to verified creators or an allowlist.'
       ],
@@ -562,7 +562,7 @@ export const RULES: Record<string, RuleDef> = {
         'Stop deposits to this address and move remaining funds from a clean device (the delegate code may front-run; prioritise what matters).',
         'Clear the delegation: sign an EIP-7702 authorization for address 0x0000000000000000000000000000000000000000 and include it in a type-4 transaction. Note: whoever obtained the original signature can re-delegate, so the key is burned.',
         'At the signing service, deny transaction type 4 (and any authorizationList) for custody addresses outright. Delegations should be impossible for these keys, not merely reviewed.',
-        'Alert when eth_getCode for any custody address changes from 0x. Safetyfirst\'s scheduled chain scan does this; a Sentinel rule is in the docs.'
+        'Alert when eth_getCode for any custody address changes from 0x. Lockguard\'s scheduled chain scan does this; a Sentinel rule is in the docs.'
       ],
       snippets: [
         {
@@ -636,7 +636,7 @@ export const RULES: Record<string, RuleDef> = {
       ],
       snippets: []
     },
-    references: [{ title: 'Safetyfirst signer policy schema and template', url: 'https://github.com/Yathish27/Lockguard/blob/main/docs/signer-policy.md' }]
+    references: [{ title: 'Lockguard signer policy schema and template', url: 'https://github.com/Yathish27/Lockguard/blob/main/docs/signer-policy.md' }]
   },
   C4: {
     id: 'C4',

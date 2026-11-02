@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { startLab, type LabHandle } from '@safetyfirst/lab';
+import { startLab, type LabHandle } from '@lockguard/lab';
 
-/** Lets the Safetyfirst UI start the lab on demand and link to both builds + the vendor CDN. */
+/** Lets the Lockguard UI start the lab on demand and link to both builds + the vendor CDN. */
 export function labRouter(): Router {
   const r = Router();
   let lab: LabHandle | null = null;

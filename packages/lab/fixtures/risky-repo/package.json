@@ -1,7 +1,7 @@
 {
   "name": "risky-exchange-frontend",
   "version": "1.0.0",
-  "description": "Deliberately insecure fixture for the Safetyfirst lab. Do not copy into production.",
+  "description": "Deliberately insecure fixture for the Lockguard lab. Do not copy into production.",
   "private": true,
   "dependencies": {
     "left-pad": "*",

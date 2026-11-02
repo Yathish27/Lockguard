@@ -27,7 +27,7 @@ export function toSarif(report: Report, repoRoot?: string): unknown {
         level: LEVEL[f.severity],
         message: { text: `${f.summary}${first ? ` — ${first.detail}` : ''}` },
         locations: [location],
-        partialFingerprints: { safetyfirstKey: f.key },
+        partialFingerprints: { lockguardKey: f.key },
         properties: { severity: f.severity, killChain: f.killChain, stage: f.stage, incidents: f.incidentIds }
       };
     })
@@ -37,7 +37,7 @@ export function toSarif(report: Report, repoRoot?: string): unknown {
     version: '2.1.0',
     runs: [
       {
-        tool: { driver: { name: 'Safetyfirst', version: report.tool.version, informationUri: 'https://github.com/Yathish27/Lockguard', rules } },
+        tool: { driver: { name: 'Lockguard', version: report.tool.version, informationUri: 'https://github.com/Yathish27/Lockguard', rules } },
         results,
         ...(repoRoot ? { originalUriBaseIds: { '%SRCROOT%': { uri: 'file://' + repoRoot.replace(/\\/g, '/').replace(/\/?$/, '/') } } } : {})
       }

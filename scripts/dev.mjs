@@ -17,5 +17,5 @@ if (!existsSync('packages/server/dist/cli.js')) {
 }
 run('tsc', 'npx', ['tsc', '-b', '--watch', '--preserveWatchOutput']);
 run('server', 'node', ['--watch', 'packages/server/dist/cli.js', 'ui', '--no-open']);
-run('ui', 'npm', ['run', 'dev', '-w', '@safetyfirst/ui']);
+run('ui', 'npm', ['run', 'dev', '-w', '@lockguard/ui']);
 console.log('\n[dev] UI (hot reload): http://localhost:5173   API: http://127.0.0.1:4477\n');

@@ -6,7 +6,7 @@ import {
   computeSri, pinActions, lintSignerPolicy, SIGNER_POLICY_TEMPLATE, toMarkdown, toSarif,
   INCIDENT_LIST, KILL_CHAINS, RULE_LIST, VERSION, approveZeroCalldata, setApprovalForAllFalseCalldata,
   buildBaseline, scanWeb, type ScanTargets, type Report, isAddressLike
-} from '@safetyfirst/core';
+} from '@lockguard/core';
 import { startScan, getJob } from './jobs.js';
 import { labRouter } from './lab-control.js';
 import { saveBaseline, loadBaseline, listBaselines } from './store.js';
@@ -17,6 +17,7 @@ const UI_DIR = [join(__dirname, '..', 'ui-dist'), join(__dirname, '..', '..', 'u
 export interface ServerOptions { port?: number; host?: string; allowRemote?: boolean }
 
 export function createApp() {
+  const HOSTED = process.env.LOCKGUARD_HOSTED === '1' || process.env.LOCKGUARD_HOSTED === 'true';
   const app = express();
   app.use(express.json({ limit: '8mb' }));
   app.disable('x-powered-by');
@@ -30,6 +31,7 @@ export function createApp() {
 
   const api = express.Router();
   api.get('/health', (_req, res) => res.json({ ok: true, version: VERSION }));
+  api.get('/config', (_req, res) => res.json({ hosted: HOSTED, version: VERSION, modules: { web: true, repo: !HOSTED, chain: true }, lab: !HOSTED }));
   api.get('/knowledge', (_req, res) => res.json({ incidents: INCIDENT_LIST, killChains: KILL_CHAINS, rules: RULE_LIST, version: VERSION }));
   api.get('/policy/template', (_req, res) => res.type('text/yaml').send(SIGNER_POLICY_TEMPLATE));
 
@@ -37,6 +39,7 @@ export function createApp() {
     try {
       const body = req.body ?? {};
       const targets: ScanTargets = {};
+      if (body.repo?.path && HOSTED) return res.status(403).json({ error: 'Repository scanning reads a local filesystem, so it runs only in the local app. Install Lockguard and run `npx lockguard scan --repo .`.' });
       if (body.web?.url) {
         let baseline = body.web.baseline ?? null;
         if (body.web.useSavedBaseline && !baseline) baseline = loadBaseline(hostOf(body.web.url));
@@ -48,10 +51,11 @@ export function createApp() {
           baseline,
           settleMs: clampNum(body.web.settleMs, 0, 15000),
           timeoutMs: clampNum(body.web.timeoutMs, 5000, 120000),
-          ignoreHTTPSErrors: !!body.web.ignoreHTTPSErrors
+          ignoreHTTPSErrors: HOSTED ? false : !!body.web.ignoreHTTPSErrors,
+          blockPrivateHosts: HOSTED
         };
       }
-      if (body.repo?.path) targets.repo = { path: String(body.repo.path) };
+      if (body.repo?.path && !HOSTED) targets.repo = { path: String(body.repo.path) };
       if (body.chain?.addresses?.length || body.chain?.policy) {
         targets.chain = {
           addresses: arr(body.chain.addresses),
@@ -98,9 +102,9 @@ export function createApp() {
     const job = getJob(req.params.id);
     if (!job?.report) return res.status(404).json({ error: 'no report' });
     const fmt = req.params.fmt;
-    if (fmt === 'md') return res.type('text/markdown').attachment(`safetyfirst-${job.id}.md`).send(toMarkdown(job.report));
-    if (fmt === 'sarif') return res.type('application/json').attachment(`safetyfirst-${job.id}.sarif`).send(JSON.stringify(toSarif(job.report, repoRootOf(job.report)), null, 2));
-    return res.type('application/json').attachment(`safetyfirst-${job.id}.json`).send(JSON.stringify(job.report, null, 2));
+    if (fmt === 'md') return res.type('text/markdown').attachment(`lockguard-${job.id}.md`).send(toMarkdown(job.report));
+    if (fmt === 'sarif') return res.type('application/json').attachment(`lockguard-${job.id}.sarif`).send(JSON.stringify(toSarif(job.report, repoRootOf(job.report)), null, 2));
+    return res.type('application/json').attachment(`lockguard-${job.id}.json`).send(JSON.stringify(job.report, null, 2));
   });
 
   // ---- hardening tools
@@ -142,7 +146,8 @@ export function createApp() {
     } catch (e: any) { res.status(400).json({ error: e?.message ?? String(e) }); }
   });
 
-  api.use('/lab', labRouter());
+  if (!HOSTED) api.use('/lab', labRouter());
+  else api.use('/lab', (_req, res) => res.status(403).json({ error: 'The lab spins up local servers, so it runs only in the local app. Clone Lockguard and run it locally to use the lab.' }));
 
   app.use('/api', api);
 
@@ -150,7 +155,7 @@ export function createApp() {
     app.use(express.static(UI_DIR, { index: false, maxAge: '1h' }));
     app.get(/.*/, (_req, res) => res.sendFile(join(UI_DIR, 'index.html')));
   } else {
-    app.get('/', (_req, res) => res.type('html').send('<h1>Safetyfirst API</h1><p>UI not built. Run <code>npm run build</code>, or use the dev server at :5173.</p>'));
+    app.get('/', (_req, res) => res.type('html').send('<h1>Lockguard API</h1><p>UI not built. Run <code>npm run build</code>, or use the dev server at :5173.</p>'));
   }
   return app;
 }

@@ -1,6 +1,6 @@
-# Signer policy (Safetyfirst v1)
+# Signer policy (Lockguard v1)
 
-A signer policy describes, in one reviewable file, what each signing key is allowed to sign. Safetyfirst lints it for the gaps the Binance (Oct 2026) and Bybit (Feb 2025) attacks walked through. The file is the source of truth; the **signing service (HSM / MPC policy engine) must enforce it next to the key**, because a policy that lives in a UI is one a compromised laptop can step around — which is exactly what Binance's co-CEO described when he said the delegation "did not pass through our normal approval controls."
+A signer policy describes, in one reviewable file, what each signing key is allowed to sign. Lockguard lints it for the gaps the Binance (Oct 2026) and Bybit (Feb 2025) attacks walked through. The file is the source of truth; the **signing service (HSM / MPC policy engine) must enforce it next to the key**, because a policy that lives in a UI is one a compromised laptop can step around — which is exactly what Binance's co-CEO described when he said the delegation "did not pass through our normal approval controls."
 
 Load the template from the Harden tab, or `GET /api/policy/template`.
 
@@ -11,7 +11,7 @@ version: 1
 org: <string>
 signers:
   - id: <string>                 # a name you recognise
-    address: "0x…"               # 20-byte address; lets Safetyfirst cross-check on-chain
+    address: "0x…"               # 20-byte address; lets Lockguard cross-check on-chain
     role: hot | warm | cold | deployer
     chainIds: [1, 8453, …]       # chains this key is used on
     allowedTxTypes: [0, 2]       # legacy + EIP-1559. NEVER 4 (EIP-7702) for custody keys.
