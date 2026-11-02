@@ -11,7 +11,7 @@ export function toSarif(report: Report, repoRoot?: string): unknown {
     shortDescription: { text: r.title },
     fullDescription: { text: r.why },
     help: { text: `${r.fix.summary}\n\n${r.fix.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}`, markdown: `**${r.fix.summary}**\n\n${r.fix.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}` },
-    helpUri: r.references[0]?.url ?? 'https://github.com/safetyfirst-dev/safetyfirst',
+    helpUri: r.references[0]?.url ?? 'https://github.com/Yathish27/Lockguard',
     defaultConfiguration: { level: LEVEL[r.severity] },
     properties: { 'security-severity': SCORE[r.severity], tags: ['security', r.killChain, r.module] }
   }));
@@ -37,7 +37,7 @@ export function toSarif(report: Report, repoRoot?: string): unknown {
     version: '2.1.0',
     runs: [
       {
-        tool: { driver: { name: 'Safetyfirst', version: report.tool.version, informationUri: 'https://github.com/safetyfirst-dev/safetyfirst', rules } },
+        tool: { driver: { name: 'Safetyfirst', version: report.tool.version, informationUri: 'https://github.com/Yathish27/Lockguard', rules } },
         results,
         ...(repoRoot ? { originalUriBaseIds: { '%SRCROOT%': { uri: 'file://' + repoRoot.replace(/\\/g, '/').replace(/\/?$/, '/') } } } : {})
       }

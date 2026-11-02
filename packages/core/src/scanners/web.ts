@@ -146,7 +146,7 @@ export async function scanWeb(target: WebTarget, onProgress: Progress = () => {}
     const context = await browser.newContext({
       storageState: (target.storageState as any) ?? undefined,
       ignoreHTTPSErrors: target.ignoreHTTPSErrors ?? false,
-      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36 Safetyfirst/0.1 (+https://github.com/safetyfirst-dev/safetyfirst)'
+      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36 Safetyfirst/0.1 (+https://github.com/Yathish27/Lockguard)'
     });
     const page = await context.newPage();
 

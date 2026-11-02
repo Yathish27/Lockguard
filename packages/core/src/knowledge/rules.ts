@@ -636,7 +636,7 @@ export const RULES: Record<string, RuleDef> = {
       ],
       snippets: []
     },
-    references: [{ title: 'Safetyfirst signer policy schema and template', url: 'https://github.com/safetyfirst-dev/safetyfirst/blob/main/docs/signer-policy.md' }]
+    references: [{ title: 'Safetyfirst signer policy schema and template', url: 'https://github.com/Yathish27/Lockguard/blob/main/docs/signer-policy.md' }]
   },
   C4: {
     id: 'C4',

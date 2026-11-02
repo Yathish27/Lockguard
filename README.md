@@ -6,6 +6,8 @@
 
 Open source · MIT · runs entirely on your machine · no telemetry
 
+<img src="docs/screenshots/01-overview.png" alt="Safetyfirst overview" width="860">
+
 </div>
 
 ---
@@ -31,10 +33,24 @@ A **local web app** (plus a CLI and a hands-on lab) with three scanners:
 
 Every finding is scored, grouped by **kill chain**, mapped to the **real incident**, and paired with a **hands-on fix** (copy-paste CSP, SRI tags, pinned workflows, revoke calldata, a signer policy).
 
+## How it helps
+
+Most security tools give you a flat list of alerts and leave you to figure out whether any of it matters. Safetyfirst is built around a different idea: **you only act on a weakness once you understand the attack it enables and can see the fix.**
+
+- **It finds the weaknesses that actually got people robbed**, not a generic checklist. Every check traces to a real 2025–2026 incident where that exact gap was the way in.
+- **It tells you why each finding matters, in plain terms**, with the real incident attached — so a developer can judge severity for their own app instead of trusting a number.
+- **It hands you the fix, ready to paste** — a strict CSP, an SRI tag, a SHA-pinned workflow, revoke calldata, a signer policy — so "you have a problem" and "here's how to close it" are the same screen.
+- **It groups findings by kill chain**, so you see *"this is the step where Polymarket happened to you,"* and which defense would have stopped it, rather than isolated line items.
+- **It lets you watch the attack happen** in a local lab, then watch the same attack fail in a hardened build — the fastest way to understand why the fix works.
+- **It runs anywhere your code and wallets are**, entirely offline, with no account and no data leaving your machine — so you can point it at production config and real addresses without hesitation.
+- **It drops into CI** with SARIF output and a `--fail-on` gate, so a regression (a new unpinned action, a committed key, a dropped CSP) breaks the build instead of shipping.
+
+**Who it's for:** developers and security teams at exchanges, wallets, dApps and any web app that moves money or holds sessions worth stealing — and anyone who wants to understand how the 2026 hacks actually worked.
+
 ## Quick start
 
 ```bash
-git clone https://github.com/safetyfirst-dev/safetyfirst
+git clone https://github.com/Yathish27/Lockguard safetyfirst
 cd safetyfirst
 npm install
 npm run build
@@ -46,6 +62,24 @@ Then:
 1. **Lab** → *Start the lab* → open the vulnerable build, log in, serve the malicious `analytics.js`, reload, and watch a third-party script drain the demo balance. Open the hardened build and watch the same attack fail.
 2. **Scan** → point the web module at the vulnerable lab build (or your own site), or the repo module at a local repository, or the chain module at your addresses.
 3. **Harden** → generate a strict CSP, hash a script for SRI, pin your GitHub Actions to commit SHAs, lint a signer policy, or build revoke calldata.
+
+## A look inside
+
+**Scan anything you own, get a score and a kill-chain map.** Pick the web, repo and/or chain module. Findings are scored A–F and exportable as Markdown, JSON or SARIF.
+
+![Scan results with score and kill-chain coverage](docs/screenshots/02-scan-killchain.png)
+
+**Every finding maps to a real incident, explains why it matters, and ships the fix.** Here a repo scan found committed secrets (R5) and ties it to the TraderTraitor developer lures and the 2025 npm worms, with masked evidence and step-by-step remediation.
+
+![An expanded finding: incident, evidence, why it matters, and the fix](docs/screenshots/03-finding.png)
+
+**Turn findings into fixes in the Harden tab** — a strict CSP builder, an SRI generator, a GitHub Actions SHA-pinner, a signer-policy linter, and approval-revoke calldata.
+
+![The Harden tab with the CSP builder](docs/screenshots/04-harden.png)
+
+**Watch the attack happen, then watch it fail.** The lab runs a vulnerable and a hardened build of a toy exchange plus a "vendor CDN" you can compromise — no real funds, keys or exploit code.
+
+![The hands-on lab](docs/screenshots/05-lab.png)
 
 ### CLI
 
@@ -60,7 +94,7 @@ npx safetyfirst scan --repo . --fail-on high --sarif out.sarif   # for CI
 ### In CI (GitHub Actions)
 
 ```yaml
-- uses: safetyfirst-dev/safetyfirst@v0
+- uses: Yathish27/Lockguard@main
   with:
     repo: .
     web: https://app.example.com/trade
