@@ -1,0 +1,17 @@
+# Firebase App Hosting config (the console "Connect to GitHub" route).
+#
+# Caveat for Lockguard: App Hosting runs a managed Node backend that does NOT include Chromium,
+# so the WEB scanner will not work here. The chain scanner, the signer-policy linter and the
+# Harden tools do work. For the full scanner (web scan included), use the Cloud Run route in
+# DEPLOY.md, which builds the Dockerfile with Chromium. App Hosting requires the Blaze plan.
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+  minInstances: 0
+  maxInstances: 1
+  concurrency: 80
+env:
+  - variable: LOCKGUARD_HOSTED
+    value: "1"
+    availability:
+      - RUNTIME

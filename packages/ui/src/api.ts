@@ -1,4 +1,5 @@
 import type { Job, Knowledge, Report } from './types';
+import bundledKnowledge from './generated/knowledge.json';
 
 const base = '/api';
 async function req<T>(path: string, opts?: RequestInit): Promise<T> {
@@ -20,7 +21,11 @@ export interface ScanRequest {
 export const api = {
   health: () => req<{ ok: boolean; version: string }>('/health'),
   config: () => req<{ hosted: boolean; version: string; modules: { web: boolean; repo: boolean; chain: boolean }; lab: boolean }>('/config'),
-  knowledge: () => req<Knowledge>('/knowledge'),
+  mode: async (): Promise<'local' | 'hosted' | 'static'> => {
+    try { const c = await req<{ hosted: boolean }>('/config'); return c.hosted ? 'hosted' : 'local'; }
+    catch { return 'static'; }
+  },
+  knowledge: async (): Promise<Knowledge> => (bundledKnowledge as Knowledge),
   startScan: (body: ScanRequest) => post<{ id: string }>('/scan', body),
   job: (id: string) => req<Job>(`/scan/${id}`),
   reportUrl: (id: string, fmt: 'json' | 'md' | 'sarif') => `${base}/scan/${id}/report.${fmt}`,

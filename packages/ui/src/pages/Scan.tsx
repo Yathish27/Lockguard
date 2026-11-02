@@ -7,7 +7,9 @@ import { KillChainMap } from '../components/KillChainMap';
 
 const NETWORKS = ['mainnet', 'base', 'arbitrum', 'optimism', 'polygon', 'bsc', 'sepolia'];
 
-export function Scan({ knowledge, labUrls, hosted = false }: { knowledge: Knowledge; labUrls: { vulnerable: string | null }; hosted?: boolean }) {
+export function Scan({ knowledge, labUrls, mode = 'local' }: { knowledge: Knowledge; labUrls: { vulnerable: string | null }; mode?: 'local' | 'hosted' | 'static' }) {
+  const hosted = mode !== 'local';
+  const isStatic = mode === 'static';
   const [useWeb, setUseWeb] = useState(true);
   const [useRepo, setUseRepo] = useState(false);
   const [useChain, setUseChain] = useState(false);
@@ -64,7 +66,8 @@ export function Scan({ knowledge, labUrls, hosted = false }: { knowledge: Knowle
       </div>
 
       <div className="banner warn">Only scan targets you control. The web scan drives a real headless browser against the URL you give it.</div>
-      {hosted && <div className="banner info">You are on the hosted Lockguard. The web and chain scanners work here (web targets must be public). Repo scanning and the lab run in the local app.</div>}
+      {mode === 'hosted' && <div className="banner info">You are on the hosted Lockguard. The web and chain scanners work here (web targets must be public). Repo scanning and the lab run in the local app.</div>}
+      {isStatic && <div className="banner info">This is the static build, so scanning is turned off. Run the scanners locally: <code>npx lockguard ui</code> (or <code>npx lockguard scan --repo .</code>), or deploy the full version with the API. The incidents, the kill chains, every check and its fix, and the CSP builder all work here.</div>}
 
       <div className="card">
         <label className="check"><input type="checkbox" checked={useWeb} onChange={(e) => setUseWeb(e.target.checked)} /> <b>Web</b> — your site, for the Polymarket / Bybit vendor-script pattern</label>
@@ -137,7 +140,7 @@ export function Scan({ knowledge, labUrls, hosted = false }: { knowledge: Knowle
       </div>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', margin: '4px 0 20px' }}>
-        <button className="btn" onClick={run} disabled={running}>{running ? <><span className="spinner" /> &nbsp;Scanning…</> : 'Run scan'}</button>
+        <button className="btn" onClick={run} disabled={running || isStatic} title={isStatic ? 'Scanning runs in the local app' : undefined}>{running ? <><span className="spinner" /> &nbsp;Scanning…</> : 'Run scan'}</button>
         {running && job && <div style={{ flex: 1 }}><div className="progress"><div style={{ width: `${job.pct}%` }} /></div><div className="statline">{job.message}</div></div>}
       </div>
 

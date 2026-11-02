@@ -13,7 +13,8 @@ const TOOLS: { id: Tool; label: string; desc: string }[] = [
   { id: 'revoke', label: 'Approval revoke calldata', desc: 'Build the transaction to drop an approval' }
 ];
 
-export function Tools({ knowledge }: { knowledge: Knowledge }) {
+export function Tools({ knowledge, mode = 'local' }: { knowledge: Knowledge; mode?: 'local' | 'hosted' | 'static' }) {
+  const isStatic = mode === 'static';
   const [tool, setTool] = useState<Tool>('csp');
   return (
     <div>
@@ -24,6 +25,7 @@ export function Tools({ knowledge }: { knowledge: Knowledge }) {
       <div className="tabs">
         {TOOLS.map((t) => <button key={t.id} className={tool === t.id ? 'active' : ''} onClick={() => setTool(t.id)}>{t.label}</button>)}
       </div>
+      {isStatic && tool !== 'csp' && <div className="banner info">This tool calls the local API, which the static build does not include. Run <code>npx lockguard ui</code> to use it, or deploy the full version. The CSP builder below works entirely in your browser.</div>}
       {tool === 'csp' && <CspBuilder />}
       {tool === 'sri' && <SriTool />}
       {tool === 'actions' && <ActionsTool />}

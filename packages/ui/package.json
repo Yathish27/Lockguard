@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5173 --strictPort",
-    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "build": "node ../../scripts/gen-knowledge.mjs && tsc -p tsconfig.json --noEmit && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

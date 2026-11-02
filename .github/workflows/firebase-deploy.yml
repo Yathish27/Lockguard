@@ -3,10 +3,9 @@
 #
 # The action refs below use version tags so this runs out of the box. Before relying on it,
 # pin them to commit SHAs with Lockguard itself: Harden -> Pin GitHub Actions (that is what this tool is for).
-name: deploy
+# Full app: UI on Firebase Hosting + API on Cloud Run (needs the Blaze plan). Manual trigger.
+name: deploy-full
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

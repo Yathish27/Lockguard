@@ -1,6 +1,7 @@
 import type { Knowledge } from '../types';
 
-export function Overview({ knowledge, go, hosted = false }: { knowledge: Knowledge; go: (tab: string) => void; hosted?: boolean }) {
+export function Overview({ knowledge, go, mode = 'local' }: { knowledge: Knowledge; go: (tab: string) => void; mode?: 'local' | 'hosted' | 'static' }) {
+  const hosted = mode !== 'local';
   return (
     <div>
       <div className="pagehead">

@@ -73,7 +73,7 @@ async function waitForJob(id: string): Promise<Report> {
 
 async function runUi(args: Record<string, string | boolean | string[]>) {
   const port = Number(args.port ?? process.env.PORT ?? 4477);
-  const host = String(args.host ?? '127.0.0.1');
+  const host = String(args.host ?? ((process.env.PORT || process.env.LOCKGUARD_HOSTED) ? '0.0.0.0' : '127.0.0.1'));
   const app = createApp();
   const server = createServer(app);
   await new Promise<void>((resolve, reject) => { server.on('error', reject); server.listen(port, host, resolve); });
