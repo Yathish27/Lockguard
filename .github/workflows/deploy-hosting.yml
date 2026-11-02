@@ -21,4 +21,4 @@ jobs:
       - name: Deploy to Firebase Hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: npx firebase-tools@latest deploy --only hosting --project lockguard-9b9b2 --non-interactive
+        run: npx firebase-tools@13 deploy --only hosting --project lockguard-9b9b2 --non-interactive
