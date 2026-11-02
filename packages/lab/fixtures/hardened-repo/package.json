@@ -1,0 +1,10 @@
+{
+  "name": "hardened-exchange-frontend",
+  "version": "1.0.0",
+  "description": "Hardened counterpart fixture for the Safetyfirst lab.",
+  "private": true,
+  "dependencies": {
+    "lodash": "4.17.21"
+  },
+  "pnpm": { "minimumReleaseAge": 4320, "onlyBuiltDependencies": ["esbuild"] }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "safetyfirst-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Safetyfirst: see the exact weaknesses behind the Polymarket, Binance and Bybit attacks in your own site, repo and wallets. UI-first, local, open source.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/server",
+    "packages/lab",
+    "packages/ui"
+  ],
+  "scripts": {
+    "build": "tsc -b && npm run build -w @safetyfirst/ui",
+    "start": "node packages/server/dist/cli.js ui",
+    "dev": "node scripts/dev.mjs",
+    "lab": "node packages/lab/dist/index.js",
+    "scan": "node packages/server/dist/cli.js scan",
+    "test": "tsc -b && tsc -p packages/core/tsconfig.test.json && node --test \"packages/core/dist/test/**/*.test.js\"",
+    "typecheck": "tsc -b --dry",
+    "clean": "rm -rf packages/*/dist packages/ui/dist packages/*/*.tsbuildinfo packages/*/tsconfig*.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

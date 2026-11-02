@@ -1,0 +1,47 @@
+name: 'Safetyfirst'
+description: 'Scan your site, repo and wallets for the weaknesses behind the Polymarket, Binance and Bybit attacks.'
+branding: { icon: 'shield', color: 'green' }
+inputs:
+  web:
+    description: 'URL to scan (a site you own). Optional.'
+    required: false
+  repo:
+    description: 'Path to the repository to scan.'
+    required: false
+    default: '.'
+  chain:
+    description: 'Comma-separated EVM addresses to scan. Optional.'
+    required: false
+  network:
+    description: 'Chain network id (mainnet, base, arbitrum, ...).'
+    required: false
+    default: 'mainnet'
+  rpc:
+    description: 'Custom RPC URL for the chain scan.'
+    required: false
+  signing-page:
+    description: 'Treat the web URL as a signing/trading page (stricter).'
+    required: false
+    default: 'false'
+  fail-on:
+    description: 'Fail the job on findings at/above this severity (critical|high|medium|low|none).'
+    required: false
+    default: 'high'
+  sarif:
+    description: 'Path to write a SARIF file for GitHub code scanning.'
+    required: false
+    default: 'safetyfirst.sarif'
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        set -e
+        ARGS=""
+        [ -n "${{ inputs.web }}" ] && ARGS="$ARGS --web ${{ inputs.web }}"
+        [ -n "${{ inputs.repo }}" ] && ARGS="$ARGS --repo ${{ inputs.repo }}"
+        [ -n "${{ inputs.chain }}" ] && ARGS="$ARGS --chain ${{ inputs.chain }} --network ${{ inputs.network }}"
+        [ -n "${{ inputs.rpc }}" ] && ARGS="$ARGS --rpc ${{ inputs.rpc }}"
+        [ "${{ inputs.signing-page }}" = "true" ] && ARGS="$ARGS --signing-page"
+        [ -n "${{ inputs.web }}" ] && npx --yes playwright install --with-deps chromium
+        npx --yes safetyfirst@latest scan $ARGS --sarif "${{ inputs.sarif }}" --fail-on "${{ inputs.fail-on }}"

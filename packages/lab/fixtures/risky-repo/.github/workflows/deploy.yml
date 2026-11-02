@@ -1,0 +1,19 @@
+name: deploy
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+permissions: write-all
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: tj-actions/changed-files@v35
+      - run: npm install
+      - run: echo "Deploying PR titled ${{ github.event.pull_request.title }}"
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

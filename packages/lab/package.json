@@ -1,0 +1,19 @@
+{
+  "name": "@safetyfirst/lab",
+  "version": "0.1.0",
+  "description": "Safetyfirst lab: a tiny local exchange in a vulnerable and a hardened build, plus a fake vendor CDN you can 'compromise' to watch the Polymarket and Bybit patterns happen.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "files": ["dist", "fixtures", "static"],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.18.0"
+  }
+}

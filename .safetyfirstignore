@@ -1,0 +1,5 @@
+# The lab fixtures are deliberately insecure teaching material. Do not scan them as if they were production.
+packages/lab/fixtures/
+# build output and deps
+node_modules/
+dist/
