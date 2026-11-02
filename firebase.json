@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "lockguard-9b9b2",
     "public": "packages/server/ui-dist",
     "ignore": [
       "firebase.json",
