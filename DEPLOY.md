@@ -37,7 +37,24 @@ gcloud config set project lockguard-9b9b2
 gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
 ```
 
-## Deploy
+## Connect GitHub and auto-deploy (recommended)
+
+Instead of deploying by hand, let GitHub deploy on every push. This uses **Workload Identity Federation**, so there is **no service-account key stored in GitHub** — the keyless approach Lockguard's own repo scanner recommends (rule R3).
+
+**One time**, with your own gcloud login:
+
+```bash
+gcloud auth login
+./scripts/setup-github-deploy.sh
+```
+
+That script enables the APIs, creates a `lockguard-deployer` service account with the deploy roles, and wires GitHub OIDC so only the `Yathish27/Lockguard` repo can impersonate it. The provider path and service-account email it prints are already hard-wired into `.github/workflows/firebase-deploy.yml`.
+
+**After that**, every push to `main` (or a manual run of the **deploy** workflow in the Actions tab) builds the UI, deploys the API to Cloud Run, and deploys the UI to Firebase Hosting. No secrets are stored.
+
+> The workflow's action references use version tags so it runs out of the box. Pin them to commit SHAs before you rely on it — with Lockguard itself: **Harden → Pin GitHub Actions**.
+
+## Deploy by hand
 
 From the repository root:
 

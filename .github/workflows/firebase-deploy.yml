@@ -1,0 +1,48 @@
+# Push-to-deploy: builds the UI, deploys the API to Cloud Run and the UI to Firebase Hosting.
+# Keyless auth via Workload Identity Federation — no stored secrets. Run scripts/setup-github-deploy.sh once first.
+#
+# The action refs below use version tags so this runs out of the box. Before relying on it,
+# pin them to commit SHAs with Lockguard itself: Harden -> Pin GitHub Actions (that is what this tool is for).
+name: deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT: lockguard-9b9b2
+      REGION: us-central1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: lockguard-9b9b2
+          workload_identity_provider: projects/356135058855/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: lockguard-deployer@lockguard-9b9b2.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Deploy API to Cloud Run
+        run: |
+          gcloud run deploy lockguard-api \
+            --source . --region "$REGION" \
+            --allow-unauthenticated \
+            --memory 2Gi --cpu 2 \
+            --min-instances 1 --max-instances 1 --no-cpu-throttling \
+            --timeout 300 \
+            --set-env-vars LOCKGUARD_HOSTED=1 \
+            --quiet
+      - name: Deploy UI to Firebase Hosting
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+        run: npx firebase-tools@latest deploy --only hosting --project "$PROJECT" --non-interactive
