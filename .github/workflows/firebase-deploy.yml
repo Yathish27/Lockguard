@@ -44,4 +44,4 @@ jobs:
       - name: Deploy UI to Firebase Hosting
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-        run: npx firebase-tools@latest deploy --only hosting --project "$PROJECT" --non-interactive
+        run: npx firebase-tools@latest deploy --only hosting --config firebase.full.json --project "$PROJECT" --non-interactive

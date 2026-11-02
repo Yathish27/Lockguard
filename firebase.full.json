@@ -1,8 +1,9 @@
 {
   "hosting": {
     "public": "packages/server/ui-dist",
-    "ignore": ["firebase.json", "firebase.hosting-only.json", "**/.*", "**/node_modules/**"],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
+      { "source": "/api/**", "run": { "serviceId": "lockguard-api", "region": "us-central1" } },
       { "source": "**", "destination": "/index.html" }
     ],
     "headers": [

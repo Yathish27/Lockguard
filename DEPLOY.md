@@ -36,14 +36,14 @@ gcloud auth login
 # then: push to main, or run the "hosting" workflow in the Actions tab.
 ```
 
-That runs `.github/workflows/firebase-hosting-only.yml`, which builds the static UI and deploys it with `firebase.hosting-only.json` (no Cloud Run). Live at `https://lockguard-9b9b2.web.app`.
+That runs `.github/workflows/firebase-hosting-only.yml`, which builds the static UI and deploys it with `firebase.json` (default) (no Cloud Run). Live at `https://lockguard-9b9b2.web.app`.
 
 Prefer zero GitHub setup? Deploy it straight from your machine, also free:
 
 ```bash
 npm ci && npm run build
 npm install -g firebase-tools && firebase login
-firebase deploy --only hosting --config firebase.hosting-only.json --project lockguard-9b9b2
+firebase deploy --only hosting --project lockguard-9b9b2
 ```
 
 ---
@@ -127,7 +127,7 @@ gcloud run deploy lockguard-api \
   --set-env-vars LOCKGUARD_HOSTED=1
 
 # 3. Deploy the static UI + the /api rewrite
-firebase deploy --only hosting
+firebase deploy --only hosting --config firebase.full.json
 ```
 
 Firebase prints the live URL (`https://lockguard-9b9b2.web.app`). Open it; the web scan, chain scan and Harden tools work, and the UI shows a note that repo scanning and the lab run in the local app.

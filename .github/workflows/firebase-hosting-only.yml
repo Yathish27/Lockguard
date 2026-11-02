@@ -2,9 +2,10 @@
 # Scanning is disabled in this build (no backend); the UI shows how to run scans locally.
 # Keyless auth via Workload Identity Federation — run scripts/setup-github-deploy.sh once first.
 name: hosting
+# Manual deploy via Workload Identity Federation (needs scripts/setup-github-deploy.sh once, which needs gcloud).
+# If you connect GitHub with `firebase init hosting:github` instead, that wizard writes its own push-to-deploy
+# workflow and you can ignore this one.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,4 +32,4 @@ jobs:
       - name: Deploy UI to Firebase Hosting (static, no backend)
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-        run: npx firebase-tools@latest deploy --only hosting --config firebase.hosting-only.json --project "$PROJECT" --non-interactive
+        run: npx firebase-tools@latest deploy --only hosting --project "$PROJECT" --non-interactive
