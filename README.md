@@ -52,10 +52,14 @@ Most security tools give you a flat list of alerts and leave you to figure out w
 ```bash
 git clone https://github.com/Yathish27/Lockguard lockguard
 cd lockguard
-npm install
+npm ci             # clean install from the committed lockfile
 npm run build
 npm start          # opens the UI at http://localhost:4477
 ```
+
+> **Windows / native-binary install error** (e.g. `Cannot find module @rollup/rollup-win32-x64-msvc`): that is [npm's optional-dependency bug](https://github.com/npm/cli/issues/4828), not a problem with the lockfile (it already carries every platform's binary). Fix it with a clean install — PowerShell: `Remove-Item -Recurse -Force node_modules; npm ci` — or delete `node_modules` and `package-lock.json`, then `npm install`.
+>
+> The **web scanner** needs a browser. The repo sets `ignore-scripts=true` (a security default), so if you don't already have Chrome, run `npx playwright install chromium` once.
 
 Then:
 
